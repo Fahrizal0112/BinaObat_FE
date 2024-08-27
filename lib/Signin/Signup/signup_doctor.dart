@@ -79,7 +79,10 @@ class _SignupDoctorState extends State<SignupDoctor> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Signin()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Signin()));
                     },
                     child: Text("SIGN IN",
                         style: GoogleFonts.poppins(

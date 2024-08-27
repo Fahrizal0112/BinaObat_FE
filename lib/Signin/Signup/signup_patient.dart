@@ -1,3 +1,4 @@
+import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -76,7 +77,12 @@ class _SignupPatientState extends State<SignupPatient> {
                     style: GoogleFonts.poppins(color: Colors.black),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Signin()));
+                    },
                     child: Text("SIGN IN",
                         style: GoogleFonts.poppins(
                             color: Colors.lightBlue,

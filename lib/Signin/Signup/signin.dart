@@ -27,7 +27,7 @@ class _SigninState extends State<Signin> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    "Sign Up as Doctor",
+                    "Sign In",
                     style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 16,
