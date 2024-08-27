@@ -48,12 +48,13 @@ class _SignupPatientState extends State<SignupPatient> {
                   decoration: InputDecoration(
                     labelText: 'Full Name',
                     labelStyle: GoogleFonts.poppins(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                   ),
                 ),
               ),
@@ -63,19 +64,62 @@ class _SignupPatientState extends State<SignupPatient> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      labelStyle: GoogleFonts.poppins(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextFormField(
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    hintText: 'Phone Number',
+                    hintStyle: GoogleFonts.poppins(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    prefixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(width: 8),
+                        Image.asset(
+                          '../assets/images/indonesia.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '+62',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          height: 24,
+                          width: 1,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 8),
+                      ],
                     ),
                   ),
                 ),
+              ),
             ],
           ),
         ),
