@@ -16,7 +16,7 @@ class _SignupPatientState extends State<SignupPatient> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
               Row(
@@ -37,107 +37,120 @@ class _SignupPatientState extends State<SignupPatient> {
                 ],
               ),
               const SizedBox(height: 30),
-              const Text("Halo"),
-              const SizedBox(height: 30),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    labelStyle: GoogleFonts.poppins(
-                      color: Colors.grey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                  ),
-                ),
-              ),
+              _buildTextField('Full Name'),
               const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: GoogleFonts.poppins(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                  ),
-                ),
-              ),
+              _buildTextField('Email'),
               const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    hintText: 'Phone Number',
-                    hintStyle: GoogleFonts.poppins(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    prefixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(width: 8),
-                        Image.asset(
-                          '../assets/images/indonesia.png',
-                          width: 24,
-                          height: 24,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '+62',
-                          style: GoogleFonts.poppins(
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          height: 24,
-                          width: 1,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              labelStyle:
-                                  GoogleFonts.poppins(color: Colors.grey),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              _buildPhoneNumberField(),
+              const SizedBox(height: 20),
+              _buildTextField('Password'),
+              const SizedBox(
+                height: 50,
+              ),
+              SizedBox(
+                width: 200,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignupPatient()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5))),
+                  child: Text("Sign Up",
+                      style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account?",
+                    style: GoogleFonts.poppins(color: Colors.black),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text("SIGN IN",
+                        style: GoogleFonts.poppins(
+                            color: Colors.lightBlue,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: GoogleFonts.poppins(color: Colors.grey),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPhoneNumberField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextFormField(
+        keyboardType: TextInputType.phone,
+        decoration: InputDecoration(
+          hintText: 'Phone Number',
+          hintStyle: GoogleFonts.poppins(color: Colors.grey),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          prefixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(width: 8),
+              Image.asset(
+                'assets/images/indonesia.png',
+                width: 24,
+                height: 24,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '+62',
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                height: 24,
+                width: 1,
+                color: Colors.grey,
+              ),
+              const SizedBox(width: 8),
             ],
           ),
         ),

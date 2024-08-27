@@ -1,15 +1,13 @@
-import 'package:bina_dokter/Signin/Signup/signin.dart';
-import 'package:bina_dokter/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignupDoctor extends StatefulWidget {
-  const SignupDoctor({super.key});
+class Signin extends StatefulWidget {
+  const Signin({super.key});
   @override
-  State<SignupDoctor> createState() => _SignupDoctorState();
+  State<Signin> createState() => _SigninState();
 }
 
-class _SignupDoctorState extends State<SignupDoctor> {
+class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +36,8 @@ class _SignupDoctorState extends State<SignupDoctor> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
-              _buildTextField('Full Name'),
               const SizedBox(height: 20),
               _buildTextField('Email'),
-              const SizedBox(height: 20),
-              _buildPhoneNumberField(),
               const SizedBox(height: 20),
               _buildTextField('Password'),
               const SizedBox(
@@ -57,7 +51,7 @@ class _SignupDoctorState extends State<SignupDoctor> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Splashscreen()));
+                            builder: (context) => const Signin()));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlue,
@@ -78,9 +72,7 @@ class _SignupDoctorState extends State<SignupDoctor> {
                     style: GoogleFonts.poppins(color: Colors.black),
                   ),
                   TextButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Signin()));
-                    },
+                    onPressed: () {},
                     child: Text("SIGN IN",
                         style: GoogleFonts.poppins(
                             color: Colors.lightBlue,
@@ -95,6 +87,7 @@ class _SignupDoctorState extends State<SignupDoctor> {
       ),
     );
   }
+}
 
   Widget _buildTextField(String label) {
     return Container(
@@ -115,50 +108,3 @@ class _SignupDoctorState extends State<SignupDoctor> {
       ),
     );
   }
-
-  Widget _buildPhoneNumberField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextFormField(
-        keyboardType: TextInputType.phone,
-        decoration: InputDecoration(
-          hintText: 'Phone Number',
-          hintStyle: GoogleFonts.poppins(color: Colors.grey),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          prefixIcon: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(width: 8),
-              Image.asset(
-                'assets/images/indonesia.png',
-                width: 24,
-                height: 24,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '+62',
-                style: GoogleFonts.poppins(
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                height: 24,
-                width: 1,
-                color: Colors.grey,
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

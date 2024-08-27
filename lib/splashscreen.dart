@@ -1,3 +1,5 @@
+import 'package:bina_dokter/Signin/Signup/signup_doctor.dart';
+import 'package:bina_dokter/Signin/Signup/signup_patient.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,10 +18,6 @@ class _SplashscreenState extends State<Splashscreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              'assets/images/logo.png',
-              width: 250,
-            ),
             Image.asset('assets/images/animasi.png', width: 250),
             const SizedBox(height: 20),
             Text(
@@ -36,16 +34,23 @@ class _SplashscreenState extends State<Splashscreen> {
                   fontSize: 14,
                   fontWeight: FontWeight.normal),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
               width: 250,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignupDoctor()));
+                },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.lightBlue,
-                  backgroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.lightBlue),
+                    foregroundColor: Colors.lightBlue,
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.lightBlue),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                 child: Text("Are your a doctor?",
@@ -55,14 +60,21 @@ class _SplashscreenState extends State<Splashscreen> {
                         fontWeight: FontWeight.bold)),
               ),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
               width: 250,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignupPatient()));
+                },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
+                    backgroundColor: Colors.lightBlue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5))),
                 child: Text("Are your a patient?",
