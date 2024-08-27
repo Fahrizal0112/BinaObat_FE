@@ -1,6 +1,5 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/service/api_service.dart';
-import 'package:bina_dokter/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
