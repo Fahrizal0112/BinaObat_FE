@@ -90,8 +90,8 @@ class _SignupPatientState extends State<SignupPatient> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                     prefixIcon: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -115,6 +115,24 @@ class _SignupPatientState extends State<SignupPatient> {
                           color: Colors.grey,
                         ),
                         const SizedBox(width: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              labelStyle:
+                                  GoogleFonts.poppins(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
