@@ -1,5 +1,7 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
+import 'package:bina_dokter/service/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignupPatient extends StatefulWidget {
@@ -9,6 +11,38 @@ class SignupPatient extends StatefulWidget {
 }
 
 class _SignupPatientState extends State<SignupPatient> {
+  bool _obscureText = true;
+  final ApiService _apiService = ApiService();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  
+    void _signUp() async {
+    try {
+      final result = await _apiService.signup(
+        _fullNameController.text,
+        _emailController.text,
+        _passwordController.text,
+        _phoneNumberController.text,
+        'Patient'
+      );
+      // print('Fullname: ${_fullNameController.text}');
+      // print('Email: ${_emailController.text}');
+      // print('Password: ${_passwordController.text}');
+      // print('phone: ${_phoneNumberController.text}');
+      if (result['message'] == 'User created successfully') {
+        debugPrint('Sign up successful!');
+        Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const Signin()),
+      );
+      } else {
+        debugPrint('Sign up failed: ${result['error']}');
+      }
+    } catch (e) {
+      debugPrint('An error occurred: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,13 +72,13 @@ class _SignupPatientState extends State<SignupPatient> {
                 ],
               ),
               const SizedBox(height: 30),
-              _buildTextField('Full Name'),
+              _buildTextField('Full Name', controller: _fullNameController),
               const SizedBox(height: 20),
-              _buildTextField('Email'),
+              _buildTextField('Email', controller: _emailController),
               const SizedBox(height: 20),
               _buildPhoneNumberField(),
               const SizedBox(height: 20),
-              _buildTextField('Password'),
+              _buildPasswordField(),
               const SizedBox(
                 height: 50,
               ),
@@ -52,11 +86,7 @@ class _SignupPatientState extends State<SignupPatient> {
                 width: 200,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignupPatient()));
+                  onPressed: () { _signUp();
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlue,
@@ -98,13 +128,14 @@ class _SignupPatientState extends State<SignupPatient> {
     );
   }
 
-  Widget _buildTextField(String label) {
+  Widget _buildTextField(String label,{required TextEditingController controller} ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           labelStyle: GoogleFonts.poppins(color: Colors.grey),
@@ -118,6 +149,39 @@ class _SignupPatientState extends State<SignupPatient> {
     );
   }
 
+
+  Widget _buildPasswordField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextFormField(
+        controller: _passwordController,
+        obscureText: _obscureText,
+        decoration: InputDecoration(
+          labelText: 'Password',
+          labelStyle: GoogleFonts.poppins(color: Colors.grey),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: Colors.grey,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildPhoneNumberField() {
     return Container(
       decoration: BoxDecoration(
@@ -125,6 +189,7 @@ class _SignupPatientState extends State<SignupPatient> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextFormField(
+        controller: _phoneNumberController,
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
           hintText: 'Phone Number',

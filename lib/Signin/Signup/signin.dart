@@ -1,3 +1,4 @@
+import 'package:bina_dokter/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,6 +9,28 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
+  bool _obscureText = true;
+  final ApiService _apiService = ApiService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _signin() async {
+    try {
+      final result = await _apiService.signin(
+        _emailController.text,
+        _passwordController.text,
+      );
+      if (result['message'] == 'Signed in successfully') {
+        debugPrint('Sign in successful!');
+        // For example: Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      } else {
+        debugPrint('Sign up failed: ${result['error']}');
+      }
+    } catch (e) {
+      debugPrint('An error occurred: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,43 +60,46 @@ class _SigninState extends State<Signin> {
                 ],
               ),
               const SizedBox(height: 20),
-              _buildTextField('Email'),
+              _buildTextField('Email', controller: _emailController),
               const SizedBox(height: 20),
-              _buildTextField('Password'),
-              const SizedBox(
-                height: 50,
-              ),
+              _buildPasswordField(),
+              const SizedBox(height: 50),
               SizedBox(
                 width: 200,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Signin()));
-                  },
+                  onPressed: _signin,
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5))),
-                  child: Text("Sign Up",
-                      style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold)),
+                    backgroundColor: Colors.lightBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)
+                    )
+                  ),
+                  child: Text(
+                    "Sign In",
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    )
+                  ),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Already have an account?",
+                    "Dont have an account?",
                     style: GoogleFonts.poppins(color: Colors.black),
                   ),
                   TextButton(
-                    onPressed: () {},
-                    child: Text("SIGN IN",
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Signin()));
+                    },
+                    child: Text("SIGN UP",
                         style: GoogleFonts.poppins(
                             color: Colors.lightBlue,
                             fontSize: 14,
@@ -87,24 +113,56 @@ class _SigninState extends State<Signin> {
       ),
     );
   }
-}
 
-  Widget _buildTextField(String label) {
+  Widget _buildTextField(String label, {required TextEditingController controller}) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           labelStyle: GoogleFonts.poppins(color: Colors.grey),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
     );
   }
+
+  Widget _buildPasswordField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextFormField(
+        controller: _passwordController,
+        obscureText: _obscureText,
+        decoration: InputDecoration(
+          labelText: 'Password',
+          labelStyle: GoogleFonts.poppins(color: Colors.grey),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: Colors.grey,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
