@@ -17,24 +17,22 @@ class _SignupDoctorState extends State<SignupDoctor> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   
-    void _signUp() async {
+  void _signUp() async {
     try {
+      final fullName = 'Dr. ${_fullNameController.text}'; // Tambahkan awalan "Dr. "
       final result = await _apiService.signup(
-        _fullNameController.text,
+        fullName,
         _emailController.text,
         _passwordController.text,
         _phoneNumberController.text,
         'Doctor'
       );
-      // print('Fullname: ${_fullNameController.text}');
-      // print('Email: ${_emailController.text}');
-      // print('Password: ${_passwordController.text}');
-      // print('phone: ${_phoneNumberController.text}');
       if (result['message'] == 'User created successfully') {
         debugPrint('Sign up successful!');
-        Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const Signin()),
-      );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Signin()),
+        );
       } else {
         debugPrint('Sign up failed: ${result['error']}');
       }

@@ -1,4 +1,5 @@
 import 'package:bina_dokter/service/api_service.dart';
+import 'package:bina_dokter/view/mainmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,7 +23,7 @@ class _SigninState extends State<Signin> {
       );
       if (result['message'] == 'Signed in successfully') {
         debugPrint('Sign in successful!');
-        // For example: Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Mainmenu()));
       } else {
         debugPrint('Sign up failed: ${result['error']}');
       }

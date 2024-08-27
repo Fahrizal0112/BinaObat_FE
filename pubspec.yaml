@@ -37,6 +37,9 @@ dependencies:
   cupertino_icons: ^1.0.6
   google_fonts: ^6.2.1
   http: ^1.2.2
+  flutter_secure_storage: ^9.2.2
+  cookie_jar: ^4.0.8
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:
