@@ -19,7 +19,7 @@ class _SignupDoctorState extends State<SignupDoctor> {
   
   void _signUp() async {
     try {
-      final fullName = 'Dr. ${_fullNameController.text}'; // Tambahkan awalan "Dr. "
+      final fullName = 'Dr. ${_fullNameController.text}'; 
       final result = await _apiService.signup(
         fullName,
         _emailController.text,

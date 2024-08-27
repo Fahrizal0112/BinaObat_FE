@@ -26,11 +26,11 @@ class ApiService {
       if (response.statusCode == 201) {
         return jsonDecode(response.body);
       } else {
-        debugPrint('Signup failed with status code: ${response.statusCode}');
+        // debugPrint('Signup failed with status code: ${response.statusCode}');
         return {'error': 'Failed to sign up'};
       }
     } catch (e) {
-      debugPrint('An error occurred during signup: $e');
+      // debugPrint('An error occurred during signup: $e');
       return {'error': 'An error occurred during signup'};
     }
   }
@@ -61,24 +61,24 @@ class ApiService {
           }
 
           if (token != null) {
-            debugPrint('Token: $token');
+            // debugPrint('Token: $token');
             final prefs = await SharedPreferences.getInstance();
             await prefs.setString('token', token);
             return data;
           } else {
-            debugPrint('Token not found in cookies.');
+            // debugPrint('Token not found in cookies.');
             return {'error': 'Token not found'};
           }
         } else {
-          debugPrint('Set-Cookie header not found.');
+          // debugPrint('Set-Cookie header not found.');
           return {'error': 'Set-Cookie header not found'};
         }
       } else {
-        debugPrint('Failed to sign in with status code: ${response.statusCode}');
+        // debugPrint('Failed to sign in with status code: ${response.statusCode}');
         return {'error': 'Failed to sign in'};
       }
     } catch (e) {
-      debugPrint('An error occurred during signin: $e');
+      // debugPrint('An error occurred during signin: $e');
       return {'error': 'An error occurred during signin'};
     }
   }
@@ -127,18 +127,18 @@ class ApiService {
         },
       );
       
-      debugPrint('Token used: $token');
-      debugPrint('Response status code: ${response.statusCode}');
-      debugPrint('Response body: ${response.body}');
+      // debugPrint('Token used: $token');
+      // debugPrint('Response status code: ${response.statusCode}');
+      // debugPrint('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
-        debugPrint('Failed to fetch full name with status code: ${response.statusCode}');
+        // debugPrint('Failed to fetch full name with status code: ${response.statusCode}');
         return {'error': 'Failed to fetch full name'};
       }
     } catch (e) {
-      debugPrint('An error occurred during fetching full name: $e');
+      // debugPrint('An error occurred during fetching full name: $e');
       return {'error': 'An error occurred during fetching full name'};
     }
   }

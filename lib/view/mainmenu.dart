@@ -1,3 +1,4 @@
+import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,43 @@ class _MainmenuState extends State<Mainmenu> {
   void initState() {
     super.initState();
     fetchfullname();
+  }
+
+  void _showSettingsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Settings'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Sign Out'),
+                onTap: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                  signOut(); // Call the sign-out method
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> signOut() async {
+    try {
+      final response = await _apiService.signout();
+      if (response['message'] == 'Signed out successfully') {
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const Signin()));
+      } else {
+        debugPrint('Sign out failed: ${response['error']}');
+      }
+    } catch (e) {
+      debugPrint('Error signing out: $e');
+    }
   }
 
   Future<void> fetchfullname() async {
@@ -67,8 +105,7 @@ class _MainmenuState extends State<Mainmenu> {
                       Icons.settings_outlined,
                       size: 40,
                     ),
-                    onPressed: () {
-                      fetchfullname(); // Fetch fullname when settings icon is clicked
+                    onPressed: () {_showSettingsDialog();
                     },
                   )
                 ],
