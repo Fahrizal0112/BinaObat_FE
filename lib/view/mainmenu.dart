@@ -4,6 +4,7 @@ import 'package:bina_dokter/view/pharmacypage.dart';
 import 'package:bina_dokter/view/prescriptionDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:bina_dokter/view/chatwithdoctor.dart'; // Tambahkan impor ini
 
 class Mainmenu extends StatefulWidget {
   const Mainmenu({super.key});
@@ -16,6 +17,7 @@ class _MainmenuState extends State<Mainmenu> {
   final ApiService _apiService = ApiService();
   List<Map<String, dynamic>> prescriptions = [];
   bool isLoading = true;
+  String? doctorId; // Tambahkan variabel ini untuk menyimpan doctor_id
 
   @override
   void initState() {
@@ -29,9 +31,13 @@ class _MainmenuState extends State<Mainmenu> {
       final response = await _apiService.getPrescriptionsId();
       if (response['prescriptions'] != null) {
         setState(() {
-          prescriptions =
-              List<Map<String, dynamic>>.from(response['prescriptions']);
+          prescriptions = List<Map<String, dynamic>>.from(response['prescriptions']);
           isLoading = false;
+          
+          // Ambil doctor_id dari resep pertama (asumsikan semua resep memiliki doctor_id yang sama)
+          if (prescriptions.isNotEmpty && prescriptions[0]['doctor_id'] != null) {
+            doctorId = prescriptions[0]['doctor_id'].toString();
+          }
         });
       }
     } catch (e) {
@@ -113,6 +119,23 @@ class _MainmenuState extends State<Mainmenu> {
       ),
     );
     print('Navigating to Pharmacy page');
+  }
+
+  void _navigateToChatWithDoctor() {
+    if (doctorId != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatWithDoctor(doctorId: doctorId!),
+        ),
+      );
+      print('Navigating to Chat with Doctor page');
+    } else {
+      // Tampilkan pesan error jika doctorId tidak tersedia
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Doctor ID not available')),
+      );
+    }
   }
 
   @override
@@ -199,6 +222,11 @@ class _MainmenuState extends State<Mainmenu> {
                               icon: Icons.local_pharmacy,
                               label: 'Pharmacy',
                               onTap: _navigateToPharmacy,
+                            ),
+                            _buildMenuButton(
+                              icon: Icons.chat,
+                              label: 'Chat with Doctor',
+                              onTap: () => doctorId != null ? _navigateToChatWithDoctor() : null,
                             ),
                           ],
                         ),

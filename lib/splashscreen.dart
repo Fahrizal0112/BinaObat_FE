@@ -28,12 +28,43 @@ class _SplashscreenState extends State<Splashscreen> {
                   fontSize: 24,
                   fontWeight: FontWeight.bold),
             ),
-            Text(
-              "Choose Your Role",
-              style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal),
+            ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("About Application", style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+                      content: Text(
+                        "Bina Dokter adalah aplikasi inovatif yang menghubungkan pasien dengan dokter untuk konsultasi kesehatan online. Fitur utama adalah memberikan arahan pengobatan yang tepat dan personal. Dokter dapat meresepkan obat secara digital, dan pasien dapat menerima petunjuk penggunaan obat yang jelas. Dengan dukungan tenaga medis profesional, kami memastikan setiap pengguna mendapatkan panduan pengobatan yang aman dan efektif sesuai dengan kondisi kesehatannya.",
+                        style: GoogleFonts.poppins(),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("Close", style: GoogleFonts.poppins()),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                "About Application",
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             const SizedBox(
               height: 20,

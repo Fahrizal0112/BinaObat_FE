@@ -415,5 +415,49 @@ class ApiService {
       };
     }
   }
+
+  Future<List<Map<String, dynamic>>> getChatHistory(String doctorId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/history/$doctorId'),
+      headers: await _getHeaders(),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      return List<Map<String, dynamic>>.from(data['chatHistory']);
+    } else {
+      throw Exception('Failed to load chat history');
+    }
+  }
+
+  Future<Map<String, dynamic>> sendMessageDoctor(String doctorId, String message) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/send'),
+      headers: await _getHeaders(),
+      body: json.encode({
+        'receiverId': doctorId,
+        'message': message,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      print('Respons body saat error: ${response.body}');
+      throw Exception('Gagal mengirim pesan');
+    }
+  }
+
+  Future<Map<String, String>> _getHeaders() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token == null) {
+      throw Exception('Token not available');
+    }
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Cookie': ' token=$token',
+    };
+  }
 }
 

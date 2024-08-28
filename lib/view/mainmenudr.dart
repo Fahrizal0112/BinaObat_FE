@@ -1,6 +1,7 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/Signin/Signup/signup_patient.dart';
 import 'package:bina_dokter/service/api_service.dart';
+import 'package:bina_dokter/view/chatwithpatient.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bina_dokter/view/add_prescription_page.dart';
@@ -257,11 +258,42 @@ class _MainmenudrState extends State<Mainmenudr> {
                         ),
                       ),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddPrescriptionPage(patient: patient),
-                          ),
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              child: Wrap(
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: Icon(Icons.medical_services),
+                                    title: Text('Add Prescription'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AddPrescriptionPage(patient: patient),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: Icon(Icons.chat),
+                                    title: Text('Chat with Patient'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Chatwithpatient(patientId: patient.patientId.toString()),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
