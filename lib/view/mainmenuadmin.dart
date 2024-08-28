@@ -127,7 +127,7 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
                       SnackBar(
                           content: Text('Token has been copied to clipboard',
                               style: GoogleFonts.poppins(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold))),
                     );
                   } else {
@@ -135,7 +135,7 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
                       SnackBar(
                           content: Text('Token not available',
                               style: GoogleFonts.poppins(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold))),
                     );
                   }

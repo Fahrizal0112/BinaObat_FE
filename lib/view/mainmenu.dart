@@ -1,5 +1,6 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/service/api_service.dart';
+import 'package:bina_dokter/view/pharmacypage.dart';
 import 'package:bina_dokter/view/prescriptionDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -105,12 +106,12 @@ class _MainmenuState extends State<Mainmenu> {
   }
 
   void _navigateToPharmacy() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => const PharmacyPage(),
-    //   ),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PharmacyPage(),
+      ),
+    );
     print('Navigating to Pharmacy page');
   }
 
