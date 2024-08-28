@@ -2,7 +2,7 @@ import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flutter/services.dart'; 
 
 class Mainmenuadmin extends StatefulWidget {
   const Mainmenuadmin({super.key});
@@ -12,6 +12,7 @@ class Mainmenuadmin extends StatefulWidget {
 
 class _MainmenuadminState extends State<Mainmenuadmin> {
   String? fullname;
+  String? doctorToken;
   final ApiService _apiService = ApiService(); 
 
   @override
@@ -73,6 +74,76 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
     }
   }
 
+  void _generateDoctorToken() async {
+    try {
+      final response = await _apiService.createDoctorToken();
+      if (response['message'] == 'Token signup dokter berhasil dibuat') {
+        setState(() {
+          doctorToken = response['token'];
+        });
+        _showTokenDialog();
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal membuat token: ${response['error']}')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Terjadi kesalahan: $e')),
+      );
+    }
+  }
+
+  void _showTokenDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text('Token Docter', style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Token has been successfully created:', style: GoogleFonts.poppins(color: Colors.black)),
+              const SizedBox(height: 10),
+              Text(doctorToken ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                ),
+                onPressed: () {
+                  if (doctorToken != null) {
+                    Clipboard.setData(ClipboardData(text: doctorToken!));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Token has been copied to clipboard', style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold))),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Token not available', style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold))),
+                    );
+                  }
+                },
+                child: Text('Salin Token', style: GoogleFonts.poppins(color: Colors.white)),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Close', style: GoogleFonts.poppins(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,6 +201,21 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
                         fontWeight: FontWeight.bold),
                   ),
                 ],
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: _generateDoctorToken,
+                child: Text(
+                  'Generate Token For Doctor',
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
               ),
             ],
           ),

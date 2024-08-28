@@ -374,5 +374,46 @@ class ApiService {
       };
     }
   }
+
+  Future<Map<String, dynamic>> createDoctorToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      if (token == null) {
+        debugPrint('Error: Token is null');
+        return {'error': 'Token not available', 'status_code': 401};
+      }
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/create-doctor-token'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': ' token=$token',
+        },
+      );
+
+      if (response.statusCode == 201) {
+        final responseData = json.decode(response.body);
+        return {
+          'message': responseData['message'],
+          'token': responseData['token'],
+        };
+      } else {
+        debugPrint('Failed to create doctor token with status code: ${response.statusCode}');
+        debugPrint('Response body: ${response.body}');
+        final errorData = json.decode(response.body);
+        return {
+          'error': errorData['error'] ?? 'Failed to create doctor token',
+          'status_code': response.statusCode
+        };
+      }
+    } catch (e) {
+      debugPrint('An error occurred while creating doctor token: $e');
+      return {
+        'error': 'An error occurred while creating doctor token',
+        'status_code': 500
+      };
+    }
+  }
 }
 

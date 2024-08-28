@@ -62,6 +62,7 @@ class _PrescriptionDetailsPageState extends State<PrescriptionDetailsPage> {
                   itemBuilder: (context, index) {
                     final medication = medications[index];
                     return Card(
+                      color: Colors.lightBlue,
                       margin: const EdgeInsets.all(8.0),
                       child: ListTile(
                         title: Text(medication['name'],
@@ -71,9 +72,9 @@ class _PrescriptionDetailsPageState extends State<PrescriptionDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Dosis: ${medication['dosage']}',
-                                style: GoogleFonts.poppins()),
+                                style: GoogleFonts.poppins(color: Colors.white)),
                             Text('Frekuensi: ${medication['frequency']}',
-                                style: GoogleFonts.poppins()),
+                                style: GoogleFonts.poppins(color: Colors.white)),
                           ],
                         ),
                       ),

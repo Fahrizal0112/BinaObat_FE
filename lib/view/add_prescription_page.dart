@@ -61,7 +61,9 @@ class _AddPrescriptionPageState extends State<AddPrescriptionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text('Add Prescription for ${widget.patient.fullname}'),
       ),
       body: SingleChildScrollView(
@@ -113,13 +115,19 @@ class _AddPrescriptionPageState extends State<AddPrescriptionPage> {
                 }).toList(),
                 const SizedBox(height: 16),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightBlue,
+                  ),
                   onPressed: _addMedication,
-                  child: Text('Add Medication', style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+                  child: Text('Add Medication', style: GoogleFonts.poppins(fontWeight: FontWeight.bold,color: Colors.white)),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightBlue,
+                  ),
                   onPressed: _submitPrescription,
-                  child: Text('Save Prescription', style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+                  child: Text('Save Prescription', style: GoogleFonts.poppins(fontWeight: FontWeight.bold,color: Colors.white)),
                 ),
               ],
             ),
