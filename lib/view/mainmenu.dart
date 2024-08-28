@@ -1,8 +1,8 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/service/api_service.dart';
+import 'package:bina_dokter/view/prescriptionDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 
 class Mainmenu extends StatefulWidget {
   const Mainmenu({super.key});
@@ -12,13 +12,33 @@ class Mainmenu extends StatefulWidget {
 
 class _MainmenuState extends State<Mainmenu> {
   String? fullname;
-  final ApiService _apiService = ApiService(); 
+  final ApiService _apiService = ApiService();
+  List<Map<String, dynamic>> prescriptions = [];
+  bool isLoading = true;
 
-  @override
   @override
   void initState() {
     super.initState();
     fetchfullname();
+    fetchPrescriptions();
+  }
+
+  Future<void> fetchPrescriptions() async {
+    try {
+      final response = await _apiService.getPrescriptionsId();
+      if (response['prescriptions'] != null) {
+        setState(() {
+          prescriptions =
+              List<Map<String, dynamic>>.from(response['prescriptions']);
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error fetching prescriptions: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void _showSettingsDialog() {
@@ -31,7 +51,7 @@ class _MainmenuState extends State<Mainmenu> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const  Icon(Icons.logout),
+                leading: const Icon(Icons.logout),
                 title: const Text('Sign Out'),
                 onTap: () {
                   Navigator.of(context).pop(); // Close the dialog
@@ -50,7 +70,8 @@ class _MainmenuState extends State<Mainmenu> {
       final response = await _apiService.signout();
       if (!mounted) return;
       if (response['message'] == 'Signed out successfully') {
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const Signin()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Signin()));
       } else {
         debugPrint('Sign out failed: ${response['error']}');
       }
@@ -71,6 +92,26 @@ class _MainmenuState extends State<Mainmenu> {
         fullname = 'Unknown';
       });
     }
+  }
+
+  void _navigateToPrescriptionDetails(String prescriptionId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            PrescriptionDetailsPage(prescriptionId: prescriptionId),
+      ),
+    );
+  }
+
+  void _navigateToPharmacy() {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => const PharmacyPage(),
+    //   ),
+    // );
+    print('Navigating to Pharmacy page');
   }
 
   @override
@@ -106,7 +147,8 @@ class _MainmenuState extends State<Mainmenu> {
                       Icons.settings_outlined,
                       size: 40,
                     ),
-                    onPressed: () {_showSettingsDialog();
+                    onPressed: () {
+                      _showSettingsDialog();
                     },
                   )
                 ],
@@ -114,7 +156,9 @@ class _MainmenuState extends State<Mainmenu> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 20,),
+                  const SizedBox(
+                    width: 20,
+                  ),
                   Text(
                     _getGreeting(DateTime.now().hour),
                     style: GoogleFonts.poppins(
@@ -131,6 +175,32 @@ class _MainmenuState extends State<Mainmenu> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              isLoading
+                  ? CircularProgressIndicator()
+                  : prescriptions.isEmpty
+                      ? Text('No Prescriptions', style: GoogleFonts.poppins())
+                      : Wrap(
+                          spacing: 20,
+                          runSpacing: 20,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            ...prescriptions.map((prescription) {
+                              return _buildMenuButton(
+                                icon: Icons.medical_services,
+                                label:
+                                    'Prescription #${prescriptions.indexOf(prescription) + 1}',
+                                onTap: () => _navigateToPrescriptionDetails(
+                                    prescription['prescription_id'].toString()),
+                              );
+                            }).toList(),
+                            _buildMenuButton(
+                              icon: Icons.local_pharmacy,
+                              label: 'Pharmacy',
+                              onTap: _navigateToPharmacy,
+                            ),
+                          ],
+                        ),
             ],
           ),
         ),
@@ -146,5 +216,51 @@ class _MainmenuState extends State<Mainmenu> {
     } else {
       return "Good Evening! ";
     }
+  }
+
+  Widget _buildMenuButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.4, // 40% dari lebar layar
+        height: 150,
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 50,
+              color: Colors.white,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -17,32 +17,60 @@ class _SignupPatientState extends State<SignupPatient> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  
-    void _signUp() async {
+
+  void _signUp1() async {
+    debugPrint('_signUp1 function called'); // Tambahkan ini untuk debugging
+    if (_fullNameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _phoneNumberController.text.isEmpty) {
+      print('One or more fields are empty');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Semua field harus diisi')),
+      );
+      return;
+    }
+
     try {
+      print('Attempting to sign up patient');
+      print('Fullname: ${_fullNameController.text}');
+      print('Email: ${_emailController.text}');
+      print('Phone: ${_phoneNumberController.text}');
+
       final result = await _apiService.signuppatient(
         _fullNameController.text,
         _emailController.text,
         _passwordController.text,
         _phoneNumberController.text,
       );
-      // print('Fullname: ${_fullNameController.text}');
-      // print('Email: ${_emailController.text}');
-      // print('Password: ${_passwordController.text}');
-      // print('phone: ${_phoneNumberController.text}');
-      if (result['message'] == 'User created successfully') {
+
+      print('API response: $result');
+
+      if (result['message'] ==
+          'Pasien berhasil dibuat dan dihubungkan dengan dokter') {
+        print('Sign up successful!');
         if (!mounted) return;
-        debugPrint('Sign up successful!');
-        Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const Signin()),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pendaftaran pasien berhasil')),
+        );
+        Navigator.pop(
+            context, true); // Kembali ke halaman sebelumnya dengan hasil true
       } else {
-        debugPrint('Sign up failed: ${result['error']}');
+        print('Sign up failed: ${result['error']}');
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Pendaftaran gagal: ${result['error']}')),
+        );
       }
     } catch (e) {
-      debugPrint('An error occurred: $e');
+      print('An error occurred: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Terjadi kesalahan: $e')),
+      );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +114,9 @@ class _SignupPatientState extends State<SignupPatient> {
                 width: 200,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () { _signUp();
+                  onPressed: () {
+                    debugPrint("Butonn clicled");
+                    _signUp1();
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlue,
@@ -128,7 +158,8 @@ class _SignupPatientState extends State<SignupPatient> {
     );
   }
 
-  Widget _buildTextField(String label,{required TextEditingController controller} ) {
+  Widget _buildTextField(String label,
+      {required TextEditingController controller}) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -149,7 +180,6 @@ class _SignupPatientState extends State<SignupPatient> {
     );
   }
 
-
   Widget _buildPasswordField() {
     return Container(
       decoration: BoxDecoration(
@@ -165,7 +195,8 @@ class _SignupPatientState extends State<SignupPatient> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           suffixIcon: IconButton(
             icon: Icon(
               _obscureText ? Icons.visibility_off : Icons.visibility,

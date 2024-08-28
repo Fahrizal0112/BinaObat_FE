@@ -3,6 +3,7 @@ import 'package:bina_dokter/Signin/Signup/signup_patient.dart';
 import 'package:bina_dokter/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:bina_dokter/view/add_prescription_page.dart';
 
 class Mainmenudr extends StatefulWidget {
   const Mainmenudr({super.key});
@@ -12,10 +13,9 @@ class Mainmenudr extends StatefulWidget {
 
 class _MainmenudrState extends State<Mainmenudr> {
   String? fullname;
-  List<String> patients = [];
+  List<Patient> patients = [];
   final ApiService _apiService = ApiService();
 
-  @override
   @override
   void initState() {
     super.initState();
@@ -26,9 +26,13 @@ class _MainmenudrState extends State<Mainmenudr> {
   void fetchPatients() async {
     try {
       final response = await _apiService.getPatients();
-      setState(() {
-        patients = List<String>.from(response['patients']);
-      });
+      if (response['patients'] != null) {
+        setState(() {
+          patients = (response['patients'] as List)
+              .map((patient) => Patient.fromJson(patient))
+              .toList();
+        });
+      }
     } catch (e) {
       debugPrint('Error fetching patients: $e');
     }
@@ -84,6 +88,50 @@ class _MainmenudrState extends State<Mainmenudr> {
       setState(() {
         fullname = 'Unknown';
       });
+    }
+  }
+
+  Future<bool?> _showDeleteConfirmationDialog(Patient patient) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Pasient'),
+          content: Text('Are you sure to delete ${patient.fullname}?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deletePatient(Patient patient) async {
+    try {
+      final result = await _apiService.deletePatient(patient.userId.toString());
+      if (result['message'] == 'Hubungan dokter-pasien berhasil dihapus') {
+        setState(() {
+          patients.removeWhere((p) => p.userId == patient.userId);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pasient deleted successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete patient: ${result['error']}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
     }
   }
 
@@ -149,33 +197,73 @@ class _MainmenudrState extends State<Mainmenudr> {
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               Text(
-                "Daftar Pasien",
+                "List Pasient",
                 style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: patients.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: const CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/avatar.png'),
-                      radius: 25,
+                  final patient = patients[index];
+                  return Dismissible(
+                    key: Key(patient.patientId.toString()),
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                      child: Icon(Icons.delete, color: Colors.white),
                     ),
-                    title: Text(
-                      patients[index],
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 14,
+                    direction: DismissDirection.endToStart,
+                    confirmDismiss: (direction) async {
+                      return await _showDeleteConfirmationDialog(patient);
+                    },
+                    onDismissed: (direction) {
+                      _deletePatient(patient);
+                    },
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                        radius: 25,
+                        child: Text(
+                          '${index + 1}',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
+                      title: Text(
+                        patient.fullname,
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'ID: ${patient.patientId}',
+                        style: GoogleFonts.poppins(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddPrescriptionPage(patient: patient),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },
@@ -184,12 +272,15 @@ class _MainmenudrState extends State<Mainmenudr> {
           ),
         ),
       ),
-            floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const SignupPatient()),
           );
+          if (result == true) {
+            fetchPatients();
+          }
         },
         label: Text(
           'Add Patient',
@@ -212,5 +303,34 @@ class _MainmenudrState extends State<Mainmenudr> {
     } else {
       return "Good Evening! ";
     }
+  }
+}
+
+class Patient {
+  final int userId;
+  final int patientId;
+  final String fullname;
+  final String email;
+  final String phonenumber;
+  final String patientToken;
+
+  Patient({
+    required this.userId,
+    required this.patientId,
+    required this.fullname,
+    required this.email,
+    required this.phonenumber,
+    required this.patientToken,
+  });
+
+  factory Patient.fromJson(Map<String, dynamic> json) {
+    return Patient(
+      userId: json['userId'],
+      patientId: json['patientId'],
+      fullname: json['fullname'],
+      email: json['email'],
+      phonenumber: json['phonenumber'],
+      patientToken: json['patientToken'],
+    );
   }
 }
