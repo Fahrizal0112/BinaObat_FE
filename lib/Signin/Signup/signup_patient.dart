@@ -20,18 +20,18 @@ class _SignupPatientState extends State<SignupPatient> {
   
     void _signUp() async {
     try {
-      final result = await _apiService.signup(
+      final result = await _apiService.signuppatient(
         _fullNameController.text,
         _emailController.text,
         _passwordController.text,
         _phoneNumberController.text,
-        'Patient'
       );
       // print('Fullname: ${_fullNameController.text}');
       // print('Email: ${_emailController.text}');
       // print('Password: ${_passwordController.text}');
       // print('phone: ${_phoneNumberController.text}');
       if (result['message'] == 'User created successfully') {
+        if (!mounted) return;
         debugPrint('Sign up successful!');
         Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const Signin()),
@@ -62,7 +62,7 @@ class _SignupPatientState extends State<SignupPatient> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    "Sign Up as Patient",
+                    "Sign Up Patient",
                     style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 16,

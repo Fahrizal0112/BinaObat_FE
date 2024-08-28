@@ -1,3 +1,4 @@
+import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/Signin/Signup/signup_doctor.dart';
 import 'package:bina_dokter/Signin/Signup/signup_patient.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class _SplashscreenState extends State<Splashscreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SignupPatient()));
+                          builder: (context) => const Signin()));
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightBlue,

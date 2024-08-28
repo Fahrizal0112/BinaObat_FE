@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-class Mainmenu extends StatefulWidget {
-  const Mainmenu({super.key});
+class Mainmenuadmin extends StatefulWidget {
+  const Mainmenuadmin({super.key});
   @override
-  State<Mainmenu> createState() => _MainmenuState();
+  State<Mainmenuadmin> createState() => _MainmenuadminState();
 }
 
-class _MainmenuState extends State<Mainmenu> {
+class _MainmenuadminState extends State<Mainmenuadmin> {
   String? fullname;
   final ApiService _apiService = ApiService(); 
 
@@ -34,8 +34,8 @@ class _MainmenuState extends State<Mainmenu> {
                 leading: const  Icon(Icons.logout),
                 title: const Text('Sign Out'),
                 onTap: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                  signOut(); // Call the sign-out method
+                  Navigator.of(context).pop(); 
+                  signOut(); 
                 },
               ),
             ],

@@ -16,6 +16,7 @@ class _SignupDoctorState extends State<SignupDoctor> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _tokenController = TextEditingController();
   
   void _signUp() async {
     try {
@@ -25,9 +26,10 @@ class _SignupDoctorState extends State<SignupDoctor> {
         _emailController.text,
         _passwordController.text,
         _phoneNumberController.text,
-        'Doctor'
+        _tokenController.text
       );
-      if (result['message'] == 'User created successfully') {
+      if (result['message'] == 'Dokter berhasil didaftarkan') {
+        if (!mounted) return;
         debugPrint('Sign up successful!');
         Navigator.pushReplacement(
           context,
@@ -76,6 +78,9 @@ class _SignupDoctorState extends State<SignupDoctor> {
               _buildPhoneNumberField(),
               const SizedBox(height: 20),
               _buildPasswordField(),
+              const SizedBox(height: 20),
+              _buildTextField('Token', controller: _tokenController),
+              
               const SizedBox(
                 height: 50,
               ),

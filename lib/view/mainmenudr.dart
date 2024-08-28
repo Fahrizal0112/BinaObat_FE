@@ -1,24 +1,37 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
+import 'package:bina_dokter/Signin/Signup/signup_patient.dart';
 import 'package:bina_dokter/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-class Mainmenu extends StatefulWidget {
-  const Mainmenu({super.key});
+class Mainmenudr extends StatefulWidget {
+  const Mainmenudr({super.key});
   @override
-  State<Mainmenu> createState() => _MainmenuState();
+  State<Mainmenudr> createState() => _MainmenudrState();
 }
 
-class _MainmenuState extends State<Mainmenu> {
+class _MainmenudrState extends State<Mainmenudr> {
   String? fullname;
-  final ApiService _apiService = ApiService(); 
+  List<String> patients = [];
+  final ApiService _apiService = ApiService();
 
   @override
   @override
   void initState() {
     super.initState();
     fetchfullname();
+    fetchPatients();
+  }
+
+  void fetchPatients() async {
+    try {
+      final response = await _apiService.getPatients();
+      setState(() {
+        patients = List<String>.from(response['patients']);
+      });
+    } catch (e) {
+      debugPrint('Error fetching patients: $e');
+    }
   }
 
   void _showSettingsDialog() {
@@ -31,7 +44,7 @@ class _MainmenuState extends State<Mainmenu> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const  Icon(Icons.logout),
+                leading: const Icon(Icons.logout),
                 title: const Text('Sign Out'),
                 onTap: () {
                   Navigator.of(context).pop(); // Close the dialog
@@ -50,7 +63,8 @@ class _MainmenuState extends State<Mainmenu> {
       final response = await _apiService.signout();
       if (!mounted) return;
       if (response['message'] == 'Signed out successfully') {
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const Signin()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Signin()));
       } else {
         debugPrint('Sign out failed: ${response['error']}');
       }
@@ -106,7 +120,8 @@ class _MainmenuState extends State<Mainmenu> {
                       Icons.settings_outlined,
                       size: 40,
                     ),
-                    onPressed: () {_showSettingsDialog();
+                    onPressed: () {
+                      _showSettingsDialog();
                     },
                   )
                 ],
@@ -114,7 +129,9 @@ class _MainmenuState extends State<Mainmenu> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 20,),
+                  const SizedBox(
+                    width: 20,
+                  ),
                   Text(
                     _getGreeting(DateTime.now().hour),
                     style: GoogleFonts.poppins(
@@ -131,9 +148,58 @@ class _MainmenuState extends State<Mainmenu> {
                   ),
                 ],
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Daftar Pasien",
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: patients.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: const CircleAvatar(
+                      backgroundImage: AssetImage('assets/images/avatar.png'),
+                      radius: 25,
+                    ),
+                    title: Text(
+                      patients[index],
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
+      ),
+            floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SignupPatient()),
+          );
+        },
+        label: Text(
+          'Add Patient',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
     );
   }
