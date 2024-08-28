@@ -2,7 +2,7 @@ import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/services.dart'; 
+import 'package:flutter/services.dart';
 
 class Mainmenuadmin extends StatefulWidget {
   const Mainmenuadmin({super.key});
@@ -13,7 +13,7 @@ class Mainmenuadmin extends StatefulWidget {
 class _MainmenuadminState extends State<Mainmenuadmin> {
   String? fullname;
   String? doctorToken;
-  final ApiService _apiService = ApiService(); 
+  final ApiService _apiService = ApiService();
 
   @override
   @override
@@ -32,11 +32,11 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const  Icon(Icons.logout),
+                leading: const Icon(Icons.logout),
                 title: const Text('Sign Out'),
                 onTap: () {
-                  Navigator.of(context).pop(); 
-                  signOut(); 
+                  Navigator.of(context).pop();
+                  signOut();
                 },
               ),
             ],
@@ -51,7 +51,8 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
       final response = await _apiService.signout();
       if (!mounted) return;
       if (response['message'] == 'Signed out successfully') {
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const Signin()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Signin()));
       } else {
         debugPrint('Sign out failed: ${response['error']}');
       }
@@ -102,14 +103,18 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: Text('Token Docter', style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold)),
+          title: Text('Token Docter',
+              style: GoogleFonts.poppins(
+                  color: Colors.black, fontWeight: FontWeight.bold)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Token has been successfully created:', style: GoogleFonts.poppins(color: Colors.black)),
+              Text('Token has been successfully created:',
+                  style: GoogleFonts.poppins(color: Colors.black)),
               const SizedBox(height: 10),
-              Text(doctorToken ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(doctorToken ?? '',
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -119,21 +124,31 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
                   if (doctorToken != null) {
                     Clipboard.setData(ClipboardData(text: doctorToken!));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Token has been copied to clipboard', style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold))),
+                      SnackBar(
+                          content: Text('Token has been copied to clipboard',
+                              style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold))),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Token not available', style: GoogleFonts.poppins(color: Colors.black,fontWeight: FontWeight.bold))),
+                      SnackBar(
+                          content: Text('Token not available',
+                              style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold))),
                     );
                   }
                 },
-                child: Text('Salin Token', style: GoogleFonts.poppins(color: Colors.white)),
+                child: Text('Copy Token',
+                    style: GoogleFonts.poppins(color: Colors.white)),
               ),
             ],
           ),
           actions: [
             TextButton(
-              child: Text('Close', style: GoogleFonts.poppins(color: Colors.black)),
+              child: Text('Close',
+                  style: GoogleFonts.poppins(color: Colors.black)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -177,7 +192,8 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
                       Icons.settings_outlined,
                       size: 40,
                     ),
-                    onPressed: () {_showSettingsDialog();
+                    onPressed: () {
+                      _showSettingsDialog();
                     },
                   )
                 ],
@@ -185,7 +201,9 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 20,),
+                  const SizedBox(
+                    width: 20,
+                  ),
                   Text(
                     _getGreeting(DateTime.now().hour),
                     style: GoogleFonts.poppins(
@@ -202,19 +220,19 @@ class _MainmenuadminState extends State<Mainmenuadmin> {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _generateDoctorToken,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
                 child: Text(
                   'Generate Token For Doctor',
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),
               ),
             ],
