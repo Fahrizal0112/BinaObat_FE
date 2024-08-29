@@ -5,8 +5,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_map_directions/flutter_map_directions.dart';
-import 'dart:math' show cos, sqrt, asin;
 
 class PharmacyPage extends StatefulWidget {
   const PharmacyPage({super.key});

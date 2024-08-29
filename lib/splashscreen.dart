@@ -1,6 +1,5 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/Signin/Signup/signup_doctor.dart';
-import 'package:bina_dokter/Signin/Signup/signup_patient.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

@@ -6,6 +6,6 @@ void main() {
     const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Splashscreen(),
-    ),
+    ),  
   );
 }
