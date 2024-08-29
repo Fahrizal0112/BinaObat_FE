@@ -40,14 +40,12 @@ class _MainmenuState extends State<Mainmenu> {
           prescriptions = List<Map<String, dynamic>>.from(response['prescriptions']);
           isLoading = false;
           
-          // Ambil doctor_id dari resep pertama (asumsikan semua resep memiliki doctor_id yang sama)
           if (prescriptions.isNotEmpty && prescriptions[0]['doctor_id'] != null) {
             doctorId = prescriptions[0]['doctor_id'].toString();
           }
         });
       }
     } catch (e) {
-      print('Error fetching prescriptions: $e');
       setState(() {
         isLoading = false;
       });
@@ -124,7 +122,6 @@ class _MainmenuState extends State<Mainmenu> {
         builder: (context) => const PharmacyPage(),
       ),
     );
-    print('Navigating to Pharmacy page');
   }
 
   void _navigateToChatWithDoctor() {
@@ -135,11 +132,10 @@ class _MainmenuState extends State<Mainmenu> {
           builder: (context) => ChatWithDoctor(doctorId: doctorId!),
         ),
       );
-      print('Navigating to Chat with Doctor page');
     } else {
       // Tampilkan pesan error jika doctorId tidak tersedia
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Doctor ID not available')),
+        const SnackBar(content: Text('Doctor ID not available')),
       );
     }
   }
@@ -252,7 +248,7 @@ class _MainmenuState extends State<Mainmenu> {
           ),
           const SizedBox(height: 20),
           isLoading
-              ? CircularProgressIndicator()
+              ? const CircularProgressIndicator()
               : prescriptions.isEmpty
                   ? Text('No Prescriptions', style: GoogleFonts.poppins())
                   : Wrap(
@@ -268,7 +264,7 @@ class _MainmenuState extends State<Mainmenu> {
                             onTap: () => _navigateToPrescriptionDetails(
                                 prescription['prescription_id'].toString()),
                           );
-                        }).toList(),
+                        }),
                         _buildMenuButton(
                           icon: Icons.local_pharmacy,
                           label: 'Pharmacy',
@@ -303,7 +299,7 @@ class _MainmenuState extends State<Mainmenu> {
           const SizedBox(height: 20),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: articles.length,
             itemBuilder: (context, index) {
               return ListTile(
@@ -323,7 +319,7 @@ class _MainmenuState extends State<Mainmenu> {
   Widget _buildHealthChart() {
     return Container(
       height: 300,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
