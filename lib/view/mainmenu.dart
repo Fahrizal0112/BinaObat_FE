@@ -1,5 +1,6 @@
 import 'package:bina_dokter/Signin/Signup/signin.dart';
 import 'package:bina_dokter/service/api_service.dart';
+import 'package:bina_dokter/view/articledetail.dart';
 import 'package:bina_dokter/view/pharmacypage.dart';
 import 'package:bina_dokter/view/prescriptionDetailsPage.dart';
 import 'package:bina_dokter/view/chatwithdoctor.dart';
@@ -141,7 +142,7 @@ class _MainmenuState extends State<Mainmenu> {
   }
 
   Future<void> fetchArticles() async {
-    final response = await http.get(Uri.parse('https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=6f2612131a394c3aa62df46b3075a398'));
+    final response = await http.get(Uri.parse('https://newsapi.org/v2/top-headlines?country=id&category=health&apiKey=6f2612131a394c3aa62df46b3075a398'));
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
       setState(() {
@@ -166,18 +167,19 @@ class _MainmenuState extends State<Mainmenu> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.article),
+            icon: Icon(Icons.article_outlined),
             label: 'Articles',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.lightBlue,
         onTap: _onItemTapped,
       ),
     );
@@ -295,74 +297,36 @@ class _MainmenuState extends State<Mainmenu> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildHealthChart(),
-          const SizedBox(height: 20),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: articles.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(articles[index].title),
-                subtitle: Text(articles[index].description),
-                onTap: () {
-                  // Implementasi untuk membuka artikel lengkap
-                },
+              return Column(
+                children: [
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    title: Text(articles[index].title),
+                    subtitle: Text(articles[index].description),
+                    onTap: () {
+                      // Navigasi ke halaman detail artikel
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ArticleDetailPage(
+                            title: articles[index].title,
+                            description: articles[index].description,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(), // Garis pemisah
+                ],
               );
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildHealthChart() {
-    return Container(
-      height: 300,
-      padding: const EdgeInsets.all(16),
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.spaceAround,
-          maxY: 100,
-          barTouchData: BarTouchData(enabled: false),
-          titlesData: FlTitlesData(
-            show: true,
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (double value, TitleMeta meta) {
-                  const style = TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14);
-                  String text;
-                  switch (value.toInt()) {
-                    case 0:
-                      text = 'Exercise';
-                      break;
-                    case 1:
-                      text = 'Diet';
-                      break;
-                    case 2:
-                      text = 'Sleep';
-                      break;
-                    case 3:
-                      text = 'Stress';
-                      break;
-                    default:
-                      text = '';
-                      break;
-                  }
-                  return Text(text, style: style);
-                },
-              ),
-            ),
-          ),
-          borderData: FlBorderData(show: false),
-          barGroups: [
-            BarChartGroupData(x: 0, barRods: [BarChartRodData(toY: 75, color: Colors.blue)]),
-            BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: 60, color: Colors.green)]),
-            BarChartGroupData(x: 2, barRods: [BarChartRodData(toY: 80, color: Colors.purple)]),
-            BarChartGroupData(x: 3, barRods: [BarChartRodData(toY: 40, color: Colors.orange)]),
-          ],
-        ),
       ),
     );
   }
@@ -428,7 +392,7 @@ class Article {
   final String title;
   final String description;
 
-  Article({required this.title, required this.description});
+  Article({required this.title, required this.description}); 
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(

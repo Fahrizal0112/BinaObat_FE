@@ -4,10 +4,10 @@ import 'package:bina_dokter/service/api_service.dart';
 
 class ChatWithDoctor extends StatefulWidget {
   final String doctorId;
-  const ChatWithDoctor({Key? key, required this.doctorId}) : super(key: key);
+  const ChatWithDoctor({super.key, required this.doctorId});
 
   @override
-  _ChatWithDoctorState createState() => _ChatWithDoctorState();
+  State<ChatWithDoctor> createState() => _ChatWithDoctorState();
 }
 
 class _ChatWithDoctorState extends State<ChatWithDoctor> {
@@ -26,20 +26,20 @@ class _ChatWithDoctorState extends State<ChatWithDoctor> {
     while (true) {
       setState(() {
       });
-      debugPrint('Memulai fetch chat history');
+      // debugPrint('Memulai fetch chat history');
       try {
         final chatHistory = await _apiService.getChatHistory(widget.doctorId);
         setState(() {
           _messages = chatHistory;
         });
-        debugPrint('Chat history berhasil diambil');
+        // debugPrint('Chat history berhasil diambil');
       } catch (e) {
-        debugPrint('Error fetching chat history: $e');
+        // debugPrint('Error fetching chat history: $e');
         // Tambahkan penanganan error di sini, misalnya menampilkan snackbar
       } finally {
         setState(() {
         });
-        debugPrint('Selesai fetch chat history');
+        // debugPrint('Selesai fetch chat history');
       }
       await Future.delayed(const Duration(seconds: 10));
     }
@@ -61,13 +61,13 @@ class _ChatWithDoctorState extends State<ChatWithDoctor> {
       try {
         final response = await _apiService.sendMessageDoctor(widget.doctorId, message);
         if (response['success'] == true) {
-          print('Message sent successfully');
+          // print('Message sent successfully');
         } else {
-          print('Failed to send message: ${response['message']}');
+          // print('Failed to send message: ${response['message']}');
           // Tambahkan penanganan error di sini, misalnya menampilkan snackbar
         }
       } catch (e) {
-        print('Error sending message: $e');
+        // print('Error sending message: $e');
         // Tambahkan penanganan error di sini, misalnya menampilkan snackbar
       }
     }
@@ -76,7 +76,9 @@ class _ChatWithDoctorState extends State<ChatWithDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           'Chat with Doctor',
           style: GoogleFonts.poppins(

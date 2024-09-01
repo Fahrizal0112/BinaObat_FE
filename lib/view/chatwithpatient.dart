@@ -26,20 +26,20 @@ class _ChatwithpatientState extends State<Chatwithpatient> {
     while (true) {
       setState(() {
       });
-      debugPrint('Memulai fetch chat history');
+      // debugPrint('Memulai fetch chat history');
       try {
         final chatHistory = await _apiService.getChatHistory(widget.patientId);
         setState(() {
           _messages = chatHistory;
         });
-        debugPrint('Chat history berhasil diambil');
+        // debugPrint('Chat history berhasil diambil');
       } catch (e) {
-        debugPrint('Error fetching chat history: $e');
+        // debugPrint('Error fetching chat history: $e');
         // Tambahkan penanganan error di sini, misalnya menampilkan snackbar
       } finally {
         setState(() {
         });
-        debugPrint('Selesai fetch chat history');
+        // debugPrint('Selesai fetch chat history');
       }
       await Future.delayed(const Duration(seconds: 10));
     }
@@ -61,13 +61,13 @@ class _ChatwithpatientState extends State<Chatwithpatient> {
       try {
         final response = await _apiService.sendMessageDoctor(widget.patientId, message);
         if (response['success'] == true) {
-          print('Message sent successfully');
+          // print('Message sent successfully');
         } else {
-          print('Failed to send message: ${response['message']}');
+          // print('Failed to send message: ${response['message']}');
           // Tambahkan penanganan error di sini, misalnya menampilkan snackbar
         }
       } catch (e) {
-        print('Error sending message: $e');
+        // print('Error sending message: $e');
         // Tambahkan penanganan error di sini, misalnya menampilkan snackbar
       }
     }
@@ -76,9 +76,11 @@ class _ChatwithpatientState extends State<Chatwithpatient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
-          'Chat with Doctor',
+          'Chat with Patient',
           style: GoogleFonts.poppins(
             color: Colors.black,
             fontWeight: FontWeight.bold,

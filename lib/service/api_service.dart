@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  final String baseUrl = 'https://a80c-2404-8000-1024-1787-3006-344a-2e15-13ae.ngrok-free.app/auth';
+  final String baseUrl = 'https://mighty-beans-crash.loca.lt/auth';
   String? token;
 
   Future<Map<String, dynamic>> signup(String fullname, String email, String password, String phone, String token) async {
